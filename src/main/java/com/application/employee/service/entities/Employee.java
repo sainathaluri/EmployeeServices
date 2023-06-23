@@ -1,11 +1,11 @@
 package com.application.employee.service.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "employees")
+@Table(name = "employee")
 public class Employee {
 
     @Id
@@ -52,4 +52,9 @@ public class Employee {
 
     @Column(name = "ON BENCH")
     private boolean onBench;
+
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "employee_id",referencedColumnName = "ID")
+    @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL)
+    private List<EmployeePO> employeePurchaseOrder;
 }
