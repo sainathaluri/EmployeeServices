@@ -1,6 +1,7 @@
 package com.application.employee.service.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,8 +15,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "purchaseorder")
-public class EmployeePO {
+@Table(name = "orders")
+public class PurchaseOrder {
 
     @Id
     @Column(name = "ID")
@@ -41,7 +42,8 @@ public class EmployeePO {
     @Column(name = "emailId")
     private String vendorEmailId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "employee_id")
     private Employee employee;
 }

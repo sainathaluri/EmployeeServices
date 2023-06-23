@@ -19,9 +19,9 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee e) {
-        Employee employee = employeeService.saveEmployee(e);
-        return ResponseEntity.status(HttpStatus.CREATED).body(employee);
+    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+        Employee employee1 = employeeService.saveEmployee(employee);
+        return ResponseEntity.status(HttpStatus.CREATED).body(employee1);
     }
     @GetMapping("/{employeeID}")
     public ResponseEntity<Employee> getEmployeeByID(@PathVariable String employeeID) {

@@ -16,7 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "employee")
+@Table(name = "employees")
 public class Employee {
 
     @Id
@@ -56,5 +56,5 @@ public class Employee {
 //    @OneToMany(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "employee_id",referencedColumnName = "ID")
     @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL)
-    private List<EmployeePO> employeePurchaseOrder;
+    private List<PurchaseOrder> employeePurchaseOrder;
 }
