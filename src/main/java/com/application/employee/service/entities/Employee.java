@@ -57,4 +57,5 @@ public class Employee {
 //    @JoinColumn(name = "employee_id",referencedColumnName = "ID")
     @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL)
     private List<PurchaseOrder> employeePurchaseOrder;
+
 }
