@@ -43,9 +43,14 @@ public class EmployeeController {
     @PostMapping("/{employeeId}/orders")
     public PurchaseOrder createOrder(@PathVariable(value = "employeeId") String employeeId, @RequestBody PurchaseOrder order) {
         Employee employee = employeeService.getEmployee(employeeId);
-//                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
         order.setEmployee(employee);
         return purchaseOrderService.saveOrder(order);
+    }
+    @GetMapping("/{employeeId}/orders")
+    public ResponseEntity<List<PurchaseOrder>> getEmployeeOrders(@PathVariable(value = "employeeId") String employeeId) {
+        Employee employee = employeeService.getEmployee(employeeId);
+        List<PurchaseOrder> orders = employee.getEmployeePurchaseOrder();
+        return ResponseEntity.ok().body(orders);
     }
     @GetMapping("/pagination/{offset}/{pageSize}")
     public ResponseEntity<Page<Employee>> getEmployeeByPagination(@PathVariable int offset, @PathVariable int pageSize){
