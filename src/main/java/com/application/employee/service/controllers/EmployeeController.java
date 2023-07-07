@@ -26,6 +26,8 @@ public class EmployeeController {
     private EmployeeService employeeService;
     @Autowired
     private PurchaseOrderService purchaseOrderService;
+    @Autowired
+    private WithHoldTrackingService withHoldTrackingService;
 
     @PostMapping
     public ResponseEntity<Employee> createEmployee(@RequestBody Employee employe) {
@@ -48,12 +50,21 @@ public class EmployeeController {
         order.setEmployee(employee);
         return purchaseOrderService.saveOrder(order);
     }
+
     @GetMapping("/{employeeId}/orders")
     public ResponseEntity<List<PurchaseOrder>> getEmployeeOrders(@PathVariable(value = "employeeId") String employeeId) {
         Employee employee = employeeService.getEmployee(employeeId);
         List<PurchaseOrder> orders = employee.getEmployeePurchaseOrder();
         return ResponseEntity.ok().body(orders);
     }
+
+    @PostMapping("/{employeeId}/trackings")
+    public WithHoldTracking createTracking(@PathVariable(value = "employeeId") String employeeId, @RequestBody WithHoldTracking track) {
+        Employee employee = employeeService.getEmployee(employeeId);
+        track.setEmployee(employee);
+        return withHoldTrackingService.saveWithHoldTracking(track);
+    }
+
     @GetMapping("/{employeeId}/trackings")
     public ResponseEntity<List<WithHoldTracking>> getEmployeeWithHold(@PathVariable(value = "employeeId") String employeeId) {
         Employee employee = employeeService.getEmployee(employeeId);

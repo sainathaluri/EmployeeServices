@@ -2,6 +2,7 @@ package com.application.employee.service.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +32,6 @@ public class WithHoldTracking {
     private BigDecimal actualRate;
 
     @Column(name = "actualAmt")
-    @Transient
     private BigDecimal actualAmt;
 
     @Column(name = "hours")
@@ -41,11 +41,9 @@ public class WithHoldTracking {
     private BigDecimal paidRate;
 
     @Column(name = "paidAmt")
-    @Transient
     private BigDecimal paidAmt;
 
     @Column(name = "balance")
-    @Transient
     private BigDecimal balance;
 
     @ManyToOne
@@ -53,21 +51,4 @@ public class WithHoldTracking {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    public BigDecimal getActualAmount() {
-        if (actualHours != null && actualRate != null) {
-            return actualHours.multiply(actualRate).setScale(2, RoundingMode.HALF_UP);
-        }
-        return BigDecimal.ZERO;
-    }
-
-    public BigDecimal getPaidAmount() {
-        if (paidHours != null && paidRate != null) {
-            return paidHours.multiply(paidRate).setScale(2, RoundingMode.HALF_UP);
-        }
-        return BigDecimal.ZERO;
-    }
-
-    public BigDecimal getBalance() {
-        return getActualAmount().subtract(getPaidAmount()).setScale(2, RoundingMode.HALF_UP);
-    }
 }
