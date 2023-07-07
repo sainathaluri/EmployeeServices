@@ -58,4 +58,7 @@ public class Employee {
     @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL)
     private List<PurchaseOrder> employeePurchaseOrder;
 
+    @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL)
+    private List<WithHoldTracking> employeeWithHoldTracking;
+
 }

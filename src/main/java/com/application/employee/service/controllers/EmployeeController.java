@@ -2,10 +2,12 @@ package com.application.employee.service.controllers;
 
 import com.application.employee.service.entities.Employee;
 import com.application.employee.service.entities.PurchaseOrder;
+import com.application.employee.service.entities.WithHoldTracking;
 import com.application.employee.service.exceptions.ResourceNotFoundException;
 import com.application.employee.service.repositories.EmployeeRespository;
 import com.application.employee.service.services.EmployeeService;
 import com.application.employee.service.services.PurchaseOrderService;
+import com.application.employee.service.services.WithHoldTrackingService;
 import com.application.employee.service.services.implementations.PurchaseOrderImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,6 +54,13 @@ public class EmployeeController {
         List<PurchaseOrder> orders = employee.getEmployeePurchaseOrder();
         return ResponseEntity.ok().body(orders);
     }
+    @GetMapping("/{employeeId}/trackings")
+    public ResponseEntity<List<WithHoldTracking>> getEmployeeWithHold(@PathVariable(value = "employeeId") String employeeId) {
+        Employee employee = employeeService.getEmployee(employeeId);
+        List<WithHoldTracking> tracking = employee.getEmployeeWithHoldTracking();
+        return ResponseEntity.ok().body(tracking);
+    }
+
     @GetMapping("/pagination/{offset}/{pageSize}")
     public ResponseEntity<Page<Employee>> getEmployeeByPagination(@PathVariable int offset, @PathVariable int pageSize){
         Page<Employee> employeeWithPagination = employeeService.findEmployeeWithPagination(offset, pageSize);
