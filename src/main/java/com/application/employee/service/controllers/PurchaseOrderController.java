@@ -30,4 +30,16 @@ public class PurchaseOrderController {
         List<PurchaseOrder> orderList = purchaseOrderService.getAllOrders();
         return ResponseEntity.ok(orderList);
     }
+    @PutMapping("/{orderId}")
+    public ResponseEntity<PurchaseOrder> updatePurchaseOrder(@PathVariable String orderId, @RequestBody PurchaseOrder order) {
+        order.setOrderId(orderId);
+        PurchaseOrder updatedOrder = purchaseOrderService.updateOrder(order);
+        return ResponseEntity.ok(updatedOrder);
+    }
+
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<Void> deletePurchaseOrder(@PathVariable String orderId) {
+        purchaseOrderService.deleteOrder(orderId);
+        return ResponseEntity.noContent().build();
+    }
 }

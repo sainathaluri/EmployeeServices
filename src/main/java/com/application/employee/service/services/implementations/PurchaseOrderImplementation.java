@@ -31,4 +31,31 @@ public class PurchaseOrderImplementation implements PurchaseOrderService {
         return purchaseOrderRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Order not found with given orderID: " + id));
     }
+    @Override
+    public PurchaseOrder updateOrder(PurchaseOrder order) {
+        if (!purchaseOrderRepository.existsById(order.getOrderId())) {
+            throw new ResourceNotFoundException("Order not found with given orderID: " + order.getOrderId());
+        }
+        return purchaseOrderRepository.save(order);
+    }
+
+//    @Override
+//    public PurchaseOrder updateOrder(String id, PurchaseOrder updatedOrder) {
+//        PurchaseOrder existingOrder = getOrder(id);
+//        existingOrder.setDateOfJoining(updatedOrder.getDateOfJoining());
+//        existingOrder.setProjectEndDate(updatedOrder.getProjectEndDate());
+//        existingOrder.setBillRate(updatedOrder.getBillRate());
+//        existingOrder.setEndClientName(updatedOrder.getEndClientName());
+//        existingOrder.setVendorPhoneNo(updatedOrder.getVendorPhoneNo());
+//        existingOrder.setVendorEmailId(updatedOrder.getVendorEmailId());
+//        return purchaseOrderRepository.save(existingOrder);
+//    }
+
+    @Override
+    public void deleteOrder(String id) {
+        PurchaseOrder order = getOrder(id);
+        purchaseOrderRepository.delete(order);
+    }
+
+
 }

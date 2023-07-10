@@ -37,6 +37,32 @@ public class EmployeeServiceImplementation implements EmployeeService {
         return employeeRespository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Employee not found with given employeeID: " + id));
     }
+    @Override
+    public Employee updateEmployee(String id, Employee e) {
+        Employee existingEmployee = employeeRespository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Employee not found with given employeeID: " + id));
+
+        existingEmployee.setFirstName(e.getFirstName());
+        existingEmployee.setLastName(e.getLastName());
+        existingEmployee.setEmailID(e.getEmailID());
+        existingEmployee.setVisaStatus(e.getVisaStatus());
+        existingEmployee.setDob(e.getDob());
+        existingEmployee.setClgOfGrad(e.getClgOfGrad());
+        existingEmployee.setVisaStartDate(e.getVisaStartDate());
+        existingEmployee.setVisaExpiryDate(e.getVisaExpiryDate());
+        existingEmployee.setOnBench(e.getOnBench());
+
+        return employeeRespository.save(existingEmployee);
+    }
+
+    @Override
+    public void deleteEmployee(String id) {
+        Employee existingEmployee = employeeRespository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Employee not found with given employeeID: " + id));
+
+        employeeRespository.delete(existingEmployee);
+    }
+
 
     @Override
     public Page<Employee> findEmployeeWithPagination(int offset, int pageSize) {
@@ -49,6 +75,5 @@ public class EmployeeServiceImplementation implements EmployeeService {
         Page<Employee> employee = employeeRespository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field)));
         return employee;
     }
-
 
 }

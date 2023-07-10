@@ -36,6 +36,7 @@ public class WithHoldTrackingServiceImpl implements WithHoldTrackingService {
         withHoldTracking.setPaidAmt(paidAmount);
 
         BigDecimal balance = withHoldTracking.getActualAmt().subtract(withHoldTracking.getPaidAmt());
+        withHoldTracking.setBalance(balance);
         return repository.save(withHoldTracking);
     }
 

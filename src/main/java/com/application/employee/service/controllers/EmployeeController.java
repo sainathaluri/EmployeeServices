@@ -1,22 +1,19 @@
 package com.application.employee.service.controllers;
 
+
 import com.application.employee.service.entities.Employee;
 import com.application.employee.service.entities.PurchaseOrder;
 import com.application.employee.service.entities.WithHoldTracking;
-import com.application.employee.service.exceptions.ResourceNotFoundException;
-import com.application.employee.service.repositories.EmployeeRespository;
 import com.application.employee.service.services.EmployeeService;
 import com.application.employee.service.services.PurchaseOrderService;
 import com.application.employee.service.services.WithHoldTrackingService;
-import com.application.employee.service.services.implementations.PurchaseOrderImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/employees")
@@ -44,6 +41,18 @@ public class EmployeeController {
         List<Employee> employeeList = employeeService.getAllEmployee();
         return ResponseEntity.ok(employeeList);
     }
+    @PutMapping("/{employeeID}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable String employeeID, @RequestBody Employee employee) {
+        Employee updatedEmployee = employeeService.updateEmployee(employeeID, employee);
+        return ResponseEntity.ok(updatedEmployee);
+    }
+
+    @DeleteMapping("/{employeeID}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable String employeeID) {
+        employeeService.deleteEmployee(employeeID);
+        return ResponseEntity.ok("Employee deleted successfully");
+    }
+
     @PostMapping("/{employeeId}/orders")
     public PurchaseOrder createOrder(@PathVariable(value = "employeeId") String employeeId, @RequestBody PurchaseOrder order) {
         Employee employee = employeeService.getEmployee(employeeId);
@@ -86,3 +95,59 @@ public class EmployeeController {
     }
 
 }
+//package com.application.employee.service.controllers;
+//
+//import com.application.employee.service.entities.Employee;
+//import com.application.employee.service.services.EmployeeService;
+//import com.application.employee.service.services.PurchaseOrderService;
+//import com.application.employee.service.services.WithHoldTrackingService;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.http.HttpStatus;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.web.bind.annotation.*;
+//
+//import java.util.List;
+//
+//@RestController
+//@RequestMapping("/employees")
+//@CrossOrigin(origins = "*")
+//public class EmployeeController {
+//    @Autowired
+//    private EmployeeService employeeService;
+//    @Autowired
+//    private PurchaseOrderService purchaseOrderService;
+//    @Autowired
+//    private WithHoldTrackingService withHoldTrackingService;
+//
+//
+//    @PostMapping
+//    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+//        Employee createdEmployee = employeeService.saveEmployee(employee);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(createdEmployee);
+//    }
+//
+//    @GetMapping("/{employeeID}")
+//    public ResponseEntity<Employee> getEmployeeByID(@PathVariable String employeeID) {
+//        Employee employee = employeeService.getEmployee(employeeID);
+//        return ResponseEntity.ok(employee);
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<Employee>> getAllEmployee() {
+//        List<Employee> employeeList = employeeService.getAllEmployee();
+//        return ResponseEntity.ok(employeeList);
+//    }
+//
+//    @PutMapping("/{employeeID}")
+//    public ResponseEntity<Employee> updateEmployee(@PathVariable String employeeID, @RequestBody Employee employee) {
+//        Employee updatedEmployee = employeeService.updateEmployee(employeeID, employee);
+//        return ResponseEntity.ok(updatedEmployee);
+//    }
+//
+//    @DeleteMapping("/{employeeID}")
+//    public ResponseEntity<String> deleteEmployee(@PathVariable String employeeID) {
+//        employeeService.deleteEmployee(employeeID);
+//        return ResponseEntity.ok("Employee deleted successfully");
+//    }
+//
+//}

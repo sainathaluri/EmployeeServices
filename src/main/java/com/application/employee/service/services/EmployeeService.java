@@ -13,9 +13,11 @@ public interface EmployeeService {
 
     Employee getEmployee(String id);
 
+    Employee updateEmployee(String id, Employee e);
+
+    void deleteEmployee(String id);
+
     Page<Employee> findEmployeeWithPagination(int offset, int pageSize);
 
     Page<Employee> findEmployeeWithPaginationAndSorting(int offset, int pageSize, String field);
-
-
 }
