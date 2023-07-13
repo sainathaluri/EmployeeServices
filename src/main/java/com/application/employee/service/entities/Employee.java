@@ -127,11 +127,9 @@
 package com.application.employee.service.entities;
 import com.application.employee.service.deserializer.CustomLocalDateDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.util.List;
-
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

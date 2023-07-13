@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/trackings")
+@RequestMapping("/api/v1/auth/trackings")
 @CrossOrigin(origins = "*")
 public class WithHoldTrackingController {
     @Autowired
