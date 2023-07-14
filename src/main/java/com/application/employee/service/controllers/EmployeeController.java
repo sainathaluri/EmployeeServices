@@ -16,8 +16,8 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/v1/auth/employees")
-@CrossOrigin(origins = "*")
+@RequestMapping("/employees")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
