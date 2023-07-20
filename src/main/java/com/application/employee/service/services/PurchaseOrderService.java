@@ -8,10 +8,6 @@ public interface PurchaseOrderService {
     List<PurchaseOrder> getAllOrders();
 
     PurchaseOrder getOrder(String id);
-
-//    PurchaseOrder updateOrder(String id, PurchaseOrder updatedOrder);
-    PurchaseOrder updateOrder(PurchaseOrder order);
-
-
+    PurchaseOrder updateOrder(String id, PurchaseOrder updatedOrder);
     void deleteOrder(String id);
 }

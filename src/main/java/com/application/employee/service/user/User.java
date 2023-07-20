@@ -1,4 +1,4 @@
-package com.application.employee.service.entities;
+package com.application.employee.service.user;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -32,11 +32,13 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return role.getAuthorites();
     }
 
     @Override

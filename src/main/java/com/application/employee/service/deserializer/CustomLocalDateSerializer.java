@@ -1,32 +1,50 @@
 package com.application.employee.service.deserializer;
-
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class CustomLocalDateDeserializer extends JsonDeserializer<LocalDate> {
+public class CustomLocalDateSerializer extends JsonSerializer<LocalDate> {
+
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     @Override
-    public LocalDate deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        String date = jsonParser.getText();
-        try {
-            if (date.contains("T")) {
-                return LocalDateTime.parse(date, DATETIME_FORMATTER).toLocalDate();
-            } else {
-                return LocalDate.parse(date, DATE_FORMATTER);
-            }
-        } catch (Exception e) {
-            throw new IOException("Failed to deserialize LocalDate", e);
-        }
+    public void serialize(LocalDate value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+        String formattedDate = value.format(DATE_FORMATTER);
+        gen.writeString(formattedDate);
     }
 }
+
+//import com.fasterxml.jackson.core.JsonParser;
+//import com.fasterxml.jackson.databind.DeserializationContext;
+//import com.fasterxml.jackson.databind.JsonDeserializer;
+//
+//import java.io.IOException;
+//import java.time.LocalDate;
+//import java.time.LocalDateTime;
+//import java.time.format.DateTimeFormatter;
+//
+//public class CustomLocalDateDeserializer extends JsonDeserializer<LocalDate> {
+//    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//    private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+//
+//    @Override
+//    public LocalDate deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+//        String date = jsonParser.getText();
+//        try {
+//            if (date.contains("T")) {
+//                return LocalDateTime.parse(date, DATETIME_FORMATTER).toLocalDate();
+//            } else {
+//                return LocalDate.parse(date, DATE_FORMATTER);
+//            }
+//        } catch (Exception e) {
+//            throw new IOException("Failed to deserialize LocalDate", e);
+//        }
+//    }
+//}
 /*
 In the original code, the CustomLocalDateDeserializer class implements the JsonDeserializer interface, which allows us to define custom deserialization logic for the LocalDate type.
 

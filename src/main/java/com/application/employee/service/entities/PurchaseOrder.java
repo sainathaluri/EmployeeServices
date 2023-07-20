@@ -7,7 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,6 +19,19 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "orders")
 public class PurchaseOrder {
+    @Override
+    public String toString() {
+        return "PurchaseOrder{" +
+                "orderId='" + orderId + '\'' +
+                ", dateOfJoining=" + dateOfJoining +
+                ", projectEndDate=" + projectEndDate +
+                ", billRate=" + billRate +
+                ", endClientName='" + endClientName + '\'' +
+                ", vendorPhoneNo='" + vendorPhoneNo + '\'' +
+                ", vendorEmailId='" + vendorEmailId + '\'' +
+                ", employee=" + employee +
+                '}';
+    }
 
     @Id
     @Column(name = "ID")

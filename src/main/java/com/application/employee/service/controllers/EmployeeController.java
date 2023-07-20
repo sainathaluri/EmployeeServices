@@ -1,6 +1,4 @@
 package com.application.employee.service.controllers;
-
-
 import com.application.employee.service.entities.Employee;
 import com.application.employee.service.entities.PurchaseOrder;
 import com.application.employee.service.entities.WithHoldTracking;
@@ -9,14 +7,17 @@ import com.application.employee.service.services.PurchaseOrderService;
 import com.application.employee.service.services.WithHoldTrackingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/employees")
+@PreAuthorize("hasRole('ADMIN')")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class EmployeeController {
     @Autowired
@@ -27,27 +28,36 @@ public class EmployeeController {
     private WithHoldTrackingService withHoldTrackingService;
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employe) {
+    @PreAuthorize("hasAuthority('admin:create')")
+    public ResponseEntity<String> createEmployee(@RequestBody Employee employe) {
         Employee employee = employeeService.saveEmployee(employe);
-        return ResponseEntity.status(HttpStatus.CREATED).body(employee);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Employee created successfully");
     }
     @GetMapping("/{employeeID}")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<Employee> getEmployeeByID(@PathVariable String employeeID) {
         Employee employee = employeeService.getEmployee(employeeID);
         return ResponseEntity.ok(employee);
     }
+
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployee() {
-        List<Employee> employeeList = employeeService.getAllEmployee();
-        return ResponseEntity.ok(employeeList);
+    @PreAuthorize("hasAuthority('admin:read')")
+    public ResponseEntity<Page<Employee>> getAllEmployee(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Employee> employees = employeeService.findEmployeeWithPagination(pageable);
+        return ResponseEntity.ok(employees);
     }
     @PutMapping("/{employeeID}")
+    @PreAuthorize("hasAuthority('admin:update')")
     public ResponseEntity<Employee> updateEmployee(@PathVariable String employeeID, @RequestBody Employee employee) {
         Employee updatedEmployee = employeeService.updateEmployee(employeeID, employee);
         return ResponseEntity.ok(updatedEmployee);
     }
-
     @DeleteMapping("/{employeeID}")
+    @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<String> deleteEmployee(@PathVariable String employeeID) {
         employeeService.deleteEmployee(employeeID);
         return ResponseEntity.ok("Employee deleted successfully");
@@ -58,6 +68,25 @@ public class EmployeeController {
         Employee employee = employeeService.getEmployee(employeeId);
         order.setEmployee(employee);
         return purchaseOrderService.saveOrder(order);
+    }
+
+    @PutMapping("/{employeeID}/orders/{orderID}")
+    public ResponseEntity<PurchaseOrder> updateOrder(
+            @PathVariable("employeeID") String employeeID,
+            @PathVariable("orderID") String orderID,
+            @RequestBody PurchaseOrder updatedOrder
+    ) {
+        Employee employee = employeeService.getEmployee(employeeID);
+        PurchaseOrder existingOrder = purchaseOrderService.getOrder(orderID);
+
+        if (existingOrder.getEmployee().getEmployeeID().equals(employeeID)) {
+            updatedOrder.setOrderId(orderID);
+            updatedOrder.setEmployee(employee);
+            PurchaseOrder updatedPurchaseOrder = purchaseOrderService.updateOrder(orderID,updatedOrder);
+            return ResponseEntity.ok(updatedPurchaseOrder);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @GetMapping("/{employeeId}/orders")
@@ -80,74 +109,29 @@ public class EmployeeController {
         List<WithHoldTracking> tracking = employee.getEmployeeWithHoldTracking();
         return ResponseEntity.ok().body(tracking);
     }
-
-    @GetMapping("/pagination/{offset}/{pageSize}")
-    public ResponseEntity<Page<Employee>> getEmployeeByPagination(@PathVariable int offset, @PathVariable int pageSize){
-        Page<Employee> employeeWithPagination = employeeService.findEmployeeWithPagination(offset, pageSize);
-        return ResponseEntity.ok(employeeWithPagination);
-    }
-    @GetMapping("/paginationandsort/{offset}/{pageSize}/{field}")
-    public ResponseEntity<Page<Employee>> getEmployeeByPaginationAndSorting(@PathVariable int offset,
-                                                                            @PathVariable int pageSize,
-                                                                            @PathVariable String field){
-        Page<Employee> employeeWithPagination = employeeService.findEmployeeWithPaginationAndSorting(offset, pageSize, field);
-        return ResponseEntity.ok(employeeWithPagination);
-    }
-
 }
-//package com.application.employee.service.controllers;
-//
-//import com.application.employee.service.entities.Employee;
-//import com.application.employee.service.services.EmployeeService;
-//import com.application.employee.service.services.PurchaseOrderService;
-//import com.application.employee.service.services.WithHoldTrackingService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.List;
-//
-//@RestController
-//@RequestMapping("/employees")
-//@CrossOrigin(origins = "*")
-//public class EmployeeController {
-//    @Autowired
-//    private EmployeeService employeeService;
-//    @Autowired
-//    private PurchaseOrderService purchaseOrderService;
-//    @Autowired
-//    private WithHoldTrackingService withHoldTrackingService;
-//
-//
-//    @PostMapping
-//    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
-//        Employee createdEmployee = employeeService.saveEmployee(employee);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(createdEmployee);
-//    }
-//
-//    @GetMapping("/{employeeID}")
-//    public ResponseEntity<Employee> getEmployeeByID(@PathVariable String employeeID) {
-//        Employee employee = employeeService.getEmployee(employeeID);
-//        return ResponseEntity.ok(employee);
-//    }
-//
-//    @GetMapping
+
+
+//        @GetMapping
 //    public ResponseEntity<List<Employee>> getAllEmployee() {
 //        List<Employee> employeeList = employeeService.getAllEmployee();
 //        return ResponseEntity.ok(employeeList);
 //    }
-//
-//    @PutMapping("/{employeeID}")
-//    public ResponseEntity<Employee> updateEmployee(@PathVariable String employeeID, @RequestBody Employee employee) {
-//        Employee updatedEmployee = employeeService.updateEmployee(employeeID, employee);
-//        return ResponseEntity.ok(updatedEmployee);
+//    @GetMapping("/pagination/{offset}/{pageSize}")
+//    public ResponseEntity<List<Employee>> getEmployeeByPagination(@PathVariable int offset, @PathVariable int pageSize){
+//        List<Employee> employeeWithPagination = employeeService.findEmployeeWithPagination(offset, pageSize).getContent();
+//        return ResponseEntity.ok(employeeWithPagination);
 //    }
-//
-//    @DeleteMapping("/{employeeID}")
-//    public ResponseEntity<String> deleteEmployee(@PathVariable String employeeID) {
-//        employeeService.deleteEmployee(employeeID);
-//        return ResponseEntity.ok("Employee deleted successfully");
+//    @GetMapping("/pagination/{offset}/{pageSize}")
+//    public ResponseEntity<Page<Employee>> getEmployeeByPagination(@PathVariable int offset, @PathVariable int pageSize){
+//        Page<Employee> employeeWithPagination = employeeService.findEmployeeWithPagination(offset, pageSize);
+//        return ResponseEntity.ok(employeeWithPagination);
 //    }
-//
-//}
+//    @GetMapping("/paginationandsort/{offset}/{pageSize}/{field}")
+//    public ResponseEntity<Page<Employee>> getEmployeeByPaginationAndSorting(@PathVariable int offset,
+//                                                                            @PathVariable int pageSize,
+//                                                                            @PathVariable String field){
+//        Page<Employee> employeeWithPagination = employeeService.findEmployeeWithPaginationAndSorting(offset, pageSize, field);
+//        return ResponseEntity.ok(employeeWithPagination);
+//    }
+

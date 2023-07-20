@@ -63,17 +63,26 @@ public class EmployeeServiceImplementation implements EmployeeService {
         employeeRespository.delete(existingEmployee);
     }
 
-
     @Override
-    public Page<Employee> findEmployeeWithPagination(int offset, int pageSize) {
-        Page<Employee> employee = employeeRespository.findAll(PageRequest.of(offset, pageSize));
-        return employee;
+    public Page<Employee> findEmployeeWithPagination(Pageable pageable) {
+        return employeeRespository.findAll(pageable);
     }
 
     @Override
-    public Page<Employee> findEmployeeWithPaginationAndSorting(int offset, int pageSize, String field) {
-        Page<Employee> employee = employeeRespository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field)));
-        return employee;
+    public Page<Employee> findEmployeeWithPaginationAndSorting(Pageable pageable, String field) {
+        Pageable pageableWithSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(field));
+        return employeeRespository.findAll(pageableWithSort);
     }
+//    @Override
+//    public Page<Employee> findEmployeeWithPagination(int offset, int pageSize) {
+//        Page<Employee> employee = employeeRespository.findAll(PageRequest.of(offset, pageSize));
+//        return employee;
+//    }
+//
+//    @Override
+//    public Page<Employee> findEmployeeWithPaginationAndSorting(int offset, int pageSize, String field) {
+//        Page<Employee> employee = employeeRespository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field)));
+//        return employee;
+//    }
 
 }

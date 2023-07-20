@@ -2,6 +2,7 @@ package com.application.employee.service.services;
 
 import com.application.employee.service.entities.Employee;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -17,7 +18,11 @@ public interface EmployeeService {
 
     void deleteEmployee(String id);
 
-    Page<Employee> findEmployeeWithPagination(int offset, int pageSize);
+    Page<Employee> findEmployeeWithPagination(Pageable pageable);
 
-    Page<Employee> findEmployeeWithPaginationAndSorting(int offset, int pageSize, String field);
+    Page<Employee> findEmployeeWithPaginationAndSorting(Pageable pageable, String field);
+
+//    Page<Employee> findEmployeeWithPagination(int offset, int pageSize);
+//
+//    Page<Employee> findEmployeeWithPaginationAndSorting(int offset, int pageSize, String field);
 }

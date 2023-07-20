@@ -1,7 +1,7 @@
 package com.application.employee.service.auth;
 
 import com.application.employee.service.config.JwtService;
-import com.application.employee.service.entities.User;
+import com.application.employee.service.user.User;
 import com.application.employee.service.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +22,7 @@ public class AuthenticationService {
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .role(request.getRole())
                 .build();
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
