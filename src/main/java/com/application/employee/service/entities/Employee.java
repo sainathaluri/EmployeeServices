@@ -126,7 +126,6 @@
 //}
 package com.application.employee.service.entities;
 import com.application.employee.service.deserializer.CustomLocalDateSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -164,17 +163,6 @@ public class Employee {
     @Column(name = "COLLEGE_OF_GRADUATION")
     private String clgOfGrad;
 
-//    @Column(name = "DATE_OF_BIRTH")
-//    @JsonDeserialize(using = CustomLocalDateDeserializer.class)
-//    private LocalDate dob;
-//
-//    @Column(name = "VISA_START_DATE")
-//    @JsonDeserialize(using = CustomLocalDateDeserializer.class)
-//    private LocalDate visaStartDate;
-//
-//    @Column(name = "VISA_EXPIRY_DATE")
-//    @JsonDeserialize(using = CustomLocalDateDeserializer.class)
-//    private LocalDate visaExpiryDate;
 @JsonSerialize(using = CustomLocalDateSerializer.class)
 private LocalDate dob;
 

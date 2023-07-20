@@ -19,19 +19,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "orders")
 public class PurchaseOrder {
-    @Override
-    public String toString() {
-        return "PurchaseOrder{" +
-                "orderId='" + orderId + '\'' +
-                ", dateOfJoining=" + dateOfJoining +
-                ", projectEndDate=" + projectEndDate +
-                ", billRate=" + billRate +
-                ", endClientName='" + endClientName + '\'' +
-                ", vendorPhoneNo='" + vendorPhoneNo + '\'' +
-                ", vendorEmailId='" + vendorEmailId + '\'' +
-                ", employee=" + employee +
-                '}';
-    }
 
     @Id
     @Column(name = "ID")

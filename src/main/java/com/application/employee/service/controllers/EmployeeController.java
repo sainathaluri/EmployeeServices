@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/employees")
-@PreAuthorize("hasRole('ADMIN')")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class EmployeeController {
     @Autowired
@@ -28,20 +27,18 @@ public class EmployeeController {
     private WithHoldTrackingService withHoldTrackingService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('admin:create')")
     public ResponseEntity<String> createEmployee(@RequestBody Employee employe) {
         Employee employee = employeeService.saveEmployee(employe);
         return ResponseEntity.status(HttpStatus.CREATED).body("Employee created successfully");
     }
     @GetMapping("/{employeeID}")
-    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<Employee> getEmployeeByID(@PathVariable String employeeID) {
         Employee employee = employeeService.getEmployee(employeeID);
         return ResponseEntity.ok(employee);
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('admin:read')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<Employee>> getAllEmployee(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
@@ -51,13 +48,11 @@ public class EmployeeController {
         return ResponseEntity.ok(employees);
     }
     @PutMapping("/{employeeID}")
-    @PreAuthorize("hasAuthority('admin:update')")
     public ResponseEntity<Employee> updateEmployee(@PathVariable String employeeID, @RequestBody Employee employee) {
         Employee updatedEmployee = employeeService.updateEmployee(employeeID, employee);
         return ResponseEntity.ok(updatedEmployee);
     }
     @DeleteMapping("/{employeeID}")
-    @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<String> deleteEmployee(@PathVariable String employeeID) {
         employeeService.deleteEmployee(employeeID);
         return ResponseEntity.ok("Employee deleted successfully");

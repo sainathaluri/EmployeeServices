@@ -19,9 +19,22 @@ public enum Role {
                     ADMIN_READ,
                     ADMIN_CREATE,
                     ADMIN_UPDATE,
-                    ADMIN_DELETE
+                    ADMIN_DELETE,
+                    MANAGER_READ,
+                    MANAGER_UPDATE,
+                    MANAGER_DELETE,
+                    MANAGER_CREATE
             )
-    );
+    ),
+    MANAGER(
+            Set.of(
+            MANAGER_READ,
+            MANAGER_UPDATE,
+            MANAGER_DELETE,
+            MANAGER_CREATE
+            )
+  )
+    ;
 
     @Getter
     private final Set<Permission> permissions;
@@ -29,7 +42,7 @@ public enum Role {
     public List<SimpleGrantedAuthority> getAuthorites() {
         var authorities = getPermissions()
                 .stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+                .map(permission -> new SimpleGrantedAuthority(permission.name()))
                 .collect(Collectors.toList());
         authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
         return authorities;

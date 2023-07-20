@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import static com.application.employee.service.user.Permission.*;
 import static com.application.employee.service.user.Role.ADMIN;
+import static com.application.employee.service.user.Role.MANAGER;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -32,13 +33,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**")
                 .permitAll()
-                .and()
-                .authorizeHttpRequests()
-               .requestMatchers("/employees/**").hasAnyRole(ADMIN.name())
-//                .requestMatchers(GET,"/admin/**").hasAnyAuthority(ADMIN_READ.name())
-//                .requestMatchers(POST,"/admin/**").hasAnyAuthority(ADMIN_CREATE.name())
-//                .requestMatchers(PUT,"/admin/**").hasAnyAuthority(ADMIN_UPDATE.name())
-//                .requestMatchers(DELETE,"/admin/**").hasAnyAuthority(ADMIN_DELETE.name())
+               .requestMatchers("/employees/**","/orders/**").hasAnyRole(ADMIN.name(),MANAGER.name())
+                .requestMatchers(GET,"/employees/**","/orders/**").hasAnyAuthority(ADMIN_READ.name(),MANAGER_READ.name())
+                .requestMatchers(POST,"/employees/**","/orders/**").hasAnyAuthority(ADMIN_CREATE.name(),MANAGER_CREATE.name())
+                .requestMatchers(PUT,"/employees/**","/orders/**").hasAnyAuthority(ADMIN_UPDATE.name(),MANAGER_UPDATE.name())
+                .requestMatchers(DELETE,"/employees/**","/orders/**").hasAnyAuthority(ADMIN_DELETE.name(),MANAGER_DELETE.name())
                 .anyRequest()
                 .authenticated()
                 .and()

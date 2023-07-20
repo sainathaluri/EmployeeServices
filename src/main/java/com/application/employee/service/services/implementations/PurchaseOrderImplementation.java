@@ -1,6 +1,5 @@
 package com.application.employee.service.services.implementations;
 
-import com.application.employee.service.entities.Employee;
 import com.application.employee.service.entities.PurchaseOrder;
 import com.application.employee.service.exceptions.ResourceNotFoundException;
 import com.application.employee.service.repositories.PurchaseOrderRepository;
