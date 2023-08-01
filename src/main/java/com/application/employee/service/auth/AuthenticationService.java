@@ -1,6 +1,7 @@
 package com.application.employee.service.auth;
 
 import com.application.employee.service.config.JwtService;
+import com.application.employee.service.user.Role;
 import com.application.employee.service.user.User;
 import com.application.employee.service.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +21,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
+                .id(UUID.randomUUID().toString())
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .email(request.getEmail())
@@ -39,8 +43,15 @@ public class AuthenticationService {
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .build();
+            return AuthenticationResponse.builder()
+                    .accessToken(jwtToken)
+                    .id(user.getId())
+                    .role(user.getRole())
+                    .build();
     }
+
+//        return AuthenticationResponse.builder()
+//                .accessToken(jwtToken)
+//                .role(user.getRole())
+//                .build();
 }

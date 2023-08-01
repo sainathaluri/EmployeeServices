@@ -25,6 +25,9 @@ public class WithHoldTracking {
     @Column(name = "month")
     private String month;
 
+    @Column(name = "year")
+    private String year;
+
     @Column(name = "actualhours")
     private BigDecimal actualHours;
 

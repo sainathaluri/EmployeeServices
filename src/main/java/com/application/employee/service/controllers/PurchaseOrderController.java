@@ -16,16 +16,13 @@ import java.util.UUID;
 public class PurchaseOrderController {
     @Autowired
     private PurchaseOrderService purchaseOrderService;
-
     @PostMapping
-
     public ResponseEntity<PurchaseOrder> createPurchaseOrder(@RequestBody PurchaseOrder order){
 
         PurchaseOrder purchaseOrder = purchaseOrderService.saveOrder(order);
         return ResponseEntity.status(HttpStatus.CREATED).body(purchaseOrder);
     }
     @GetMapping("/{orderId}")
-
     public ResponseEntity<PurchaseOrder> getPurchasedOrderById(@PathVariable String orderId){
         PurchaseOrder order = purchaseOrderService.getOrder(orderId);
         return ResponseEntity.ok(order);

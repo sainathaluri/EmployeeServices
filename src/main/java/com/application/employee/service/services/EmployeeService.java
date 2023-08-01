@@ -22,7 +22,4 @@ public interface EmployeeService {
 
     Page<Employee> findEmployeeWithPaginationAndSorting(Pageable pageable, String field);
 
-//    Page<Employee> findEmployeeWithPagination(int offset, int pageSize);
-//
-//    Page<Employee> findEmployeeWithPaginationAndSorting(int offset, int pageSize, String field);
 }

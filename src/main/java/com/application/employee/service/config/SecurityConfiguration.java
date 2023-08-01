@@ -15,8 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.application.employee.service.user.Permission.*;
-import static com.application.employee.service.user.Role.ADMIN;
-import static com.application.employee.service.user.Role.MANAGER;
+import static com.application.employee.service.user.Role.*;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -33,11 +32,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**")
                 .permitAll()
-               .requestMatchers("/employees/**","/orders/**").hasAnyRole(ADMIN.name(),MANAGER.name())
-                .requestMatchers(GET,"/employees/**","/orders/**").hasAnyAuthority(ADMIN_READ.name(),MANAGER_READ.name())
-                .requestMatchers(POST,"/employees/**","/orders/**").hasAnyAuthority(ADMIN_CREATE.name(),MANAGER_CREATE.name())
-                .requestMatchers(PUT,"/employees/**","/orders/**").hasAnyAuthority(ADMIN_UPDATE.name(),MANAGER_UPDATE.name())
-                .requestMatchers(DELETE,"/employees/**","/orders/**").hasAnyAuthority(ADMIN_DELETE.name(),MANAGER_DELETE.name())
+               .requestMatchers("/employees/**","/orders/**").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
+                .requestMatchers(GET,"/employees/**","/orders/**","/trackings/**").hasAnyAuthority(ADMIN_READ.name(),EMPLOYEE_READ.name())
+                .requestMatchers(POST,"/employees/**","/orders/**","/trackings/**").hasAnyAuthority(ADMIN_CREATE.name(),EMPLOYEE_CREATE.name())
+                .requestMatchers(PUT,"/employees/**","/orders/**","/trackings/**").hasAnyAuthority(ADMIN_UPDATE.name(),EMPLOYEE_UPDATE.name())
+                .requestMatchers(DELETE,"/employees/**","/orders/**","/trackings/**").hasAnyAuthority(ADMIN_DELETE.name(),EMPLOYEE_DELETE.name())
                 .anyRequest()
                 .authenticated()
                 .and()

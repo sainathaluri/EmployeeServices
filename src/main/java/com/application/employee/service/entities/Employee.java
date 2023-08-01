@@ -163,8 +163,11 @@ public class Employee {
     @Column(name = "COLLEGE_OF_GRADUATION")
     private String clgOfGrad;
 
-@JsonSerialize(using = CustomLocalDateSerializer.class)
-private LocalDate dob;
+    @Column(name = "PHONE_NO")
+    private String phoneNo;
+
+    @JsonSerialize(using = CustomLocalDateSerializer.class)
+    private LocalDate dob;
 
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     private LocalDate visaStartDate;
@@ -172,13 +175,22 @@ private LocalDate dob;
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     private LocalDate visaExpiryDate;
 
-
     @Column(name = "ON_BENCH")
     private String onBench;
+
+    @Column(name = "EMAIL", unique = true)
+    private String email;
+
+    @Column(name = "PASSWORD")
+    private String password;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<PurchaseOrder> employeePurchaseOrder;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<WithHoldTracking> employeeWithHoldTracking;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<ProjectHistory> employeeProjectHistory;
+
 }

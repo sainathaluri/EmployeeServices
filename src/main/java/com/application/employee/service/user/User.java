@@ -1,22 +1,20 @@
 package com.application.employee.service.user;
 
+import com.application.employee.service.entities.Employee;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.Collection;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,16 +23,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
-    private Integer id;
+    private String id;
     private String firstname;
     private String lastname;
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorites();
