@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/project-history")
+@RequestMapping("/projects")
 @CrossOrigin(origins = "*")
 public class ProjectHistoryController {
     @Autowired

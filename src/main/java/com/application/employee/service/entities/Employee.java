@@ -193,4 +193,6 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<ProjectHistory> employeeProjectHistory;
 
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<VisaDetails> employeeVisaDetails;
 }

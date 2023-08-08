@@ -12,12 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,10 +44,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
         userRepository.save(newUser);
 
         return savedEmployee;
-
-
     }
-
     @Override
     public List<Employee> getAllEmployee() {
         return employeeRespository.findAll();
@@ -77,6 +70,8 @@ public class EmployeeServiceImplementation implements EmployeeService {
         existingEmployee.setVisaStartDate(employee.getVisaStartDate());
         existingEmployee.setVisaExpiryDate(employee.getVisaExpiryDate());
         existingEmployee.setOnBench(employee.getOnBench());
+        existingEmployee.setEmail(employee.getEmail());
+        existingEmployee.setPassword(employee.getPassword());
 
         return employeeRespository.save(existingEmployee);
     }

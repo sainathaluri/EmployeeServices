@@ -32,6 +32,18 @@ public class ProjectHistoryServiceImpl implements ProjectHistoryService {
     }
 
     @Override
+    public ProjectHistory updateProjectHistory(String id, ProjectHistory updateProjectHistory) {
+        ProjectHistory existingProject = getProjectHistoryById(id);
+        existingProject.setSubVendorOne(updateProjectHistory.getSubVendorOne());
+        existingProject.setSubVendorTwo(updateProjectHistory.getSubVendorTwo());
+        existingProject.setProjectAddress(updateProjectHistory.getProjectAddress());
+        existingProject.setProjectStartDate(updateProjectHistory.getProjectStartDate());
+        existingProject.setProjectEndDate(updateProjectHistory.getProjectEndDate());
+        existingProject.setProjectStatus(updateProjectHistory.getProjectStatus());
+        return projectHistoryRepository.save(existingProject);
+    }
+
+    @Override
     public void deleteProjectHistory(String id) {
         ProjectHistory history = getProjectHistoryById(id);
         projectHistoryRepository.delete(history);

@@ -39,7 +39,7 @@ public class PurchaseOrderImplementation implements PurchaseOrderService {
     @Override
     public PurchaseOrder updateOrder(String id, PurchaseOrder updatedOrder) {
         PurchaseOrder existingOrder = getOrder(id);
-        System.out.println(existingOrder);
+
         existingOrder.setDateOfJoining(updatedOrder.getDateOfJoining());
         existingOrder.setProjectEndDate(updatedOrder.getProjectEndDate());
         existingOrder.setBillRate(updatedOrder.getBillRate());

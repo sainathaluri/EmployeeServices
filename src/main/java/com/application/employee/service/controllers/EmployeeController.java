@@ -1,12 +1,6 @@
 package com.application.employee.service.controllers;
-import com.application.employee.service.entities.Employee;
-import com.application.employee.service.entities.ProjectHistory;
-import com.application.employee.service.entities.PurchaseOrder;
-import com.application.employee.service.entities.WithHoldTracking;
-import com.application.employee.service.services.EmployeeService;
-import com.application.employee.service.services.ProjectHistoryService;
-import com.application.employee.service.services.PurchaseOrderService;
-import com.application.employee.service.services.WithHoldTrackingService;
+import com.application.employee.service.entities.*;
+import com.application.employee.service.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +23,8 @@ public class EmployeeController {
     private WithHoldTrackingService withHoldTrackingService;
     @Autowired
     private ProjectHistoryService projectHistoryService;
+    @Autowired
+    private VisaDetailsService visaDetailsService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -114,19 +110,64 @@ public class EmployeeController {
         List<WithHoldTracking> tracking = employee.getEmployeeWithHoldTracking();
         return ResponseEntity.ok().body(tracking);
     }
-    @PostMapping("/{employeeId}/project-history")
+    @PostMapping("/{employeeId}/projects")
     @PreAuthorize("hasRole('ADMIN')")
     public ProjectHistory createHistory(@PathVariable(value = "employeeId") String employeeId, @RequestBody ProjectHistory history){
         Employee employee = employeeService.getEmployee(employeeId);
         history.setEmployee(employee);
         return projectHistoryService.saveProjectHistory(history);
     }
-    @GetMapping("/{employeeId}/project-history")
+    @PutMapping("/projects/{projectID}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ProjectHistory> updateHistory(
+            @PathVariable("projectID") String projectID,
+            @RequestBody ProjectHistory updateHistory
+    ) {
+        ProjectHistory existingProjectHistory = projectHistoryService.getProjectHistoryById(projectID);
+        updateHistory.setProjectId(projectID);
+        ProjectHistory updateProjectHistory = projectHistoryService.updateProjectHistory(projectID,updateHistory);
+        return ResponseEntity.ok(updateProjectHistory);
+    }
+    @GetMapping("/{employeeId}/projects")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ProjectHistory>> getEmployeeProjectHistory(@PathVariable(value = "employeeId") String employeeId){
         Employee employee = employeeService.getEmployee(employeeId);
         List<ProjectHistory> historyList = employee.getEmployeeProjectHistory();
         return ResponseEntity.ok().body(historyList);
+    }
+    @PostMapping("/{employeeId}/visa-details")
+    @PreAuthorize("hasRole('ADMIN')")
+    public VisaDetails createDetails(@PathVariable(value = "employeeId") String employeeId, @RequestBody VisaDetails details){
+        Employee employee = employeeService.getEmployee(employeeId);
+        details.setEmployee(employee);
+        return visaDetailsService.saveDetails(details);
+    }
+    @PutMapping("/visa-details/{visaID}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<VisaDetails> updateVisaDetails(
+            @PathVariable("visaID") String visaID,
+            @RequestBody VisaDetails updateVisaDetails
+    ){
+        VisaDetails existingVisaDetails = visaDetailsService.getVisaDetailsById(visaID);
+        updateVisaDetails.setVisaId(visaID);
+        VisaDetails updateDetails = visaDetailsService.updateVisaDetails(visaID,updateVisaDetails);
+        return ResponseEntity.ok(updateDetails);
+    }
+//    public ResponseEntity<ProjectHistory> updateHistory(
+//            @PathVariable("projectID") String projectID,
+//            @RequestBody ProjectHistory updateHistory
+//    ) {
+//        ProjectHistory existingProjectHistory = projectHistoryService.getProjectHistoryById(projectID);
+//        updateHistory.setProjectId(projectID);
+//        ProjectHistory updateProjectHistory = projectHistoryService.updateProjectHistory(projectID,updateHistory);
+//        return ResponseEntity.ok(updateProjectHistory);
+//    }
+    @GetMapping("/{employeeId}/visa-details")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<VisaDetails>> getEmployeeVisaDetails(@PathVariable(value = "employeeId") String employeeId){
+        Employee employee = employeeService.getEmployee(employeeId);
+        List<VisaDetails> detailsList = employee.getEmployeeVisaDetails();
+        return ResponseEntity.ok().body(detailsList);
     }
 }
 
