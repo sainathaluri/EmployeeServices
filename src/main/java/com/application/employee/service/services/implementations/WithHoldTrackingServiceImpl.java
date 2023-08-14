@@ -29,25 +29,38 @@ public class WithHoldTrackingServiceImpl implements WithHoldTrackingService {
         String randomTrackingId = UUID.randomUUID().toString();
         withHoldTracking.setTrackingId(randomTrackingId);
 
-        BigDecimal actualAmount = withHoldTracking.getActualHours().multiply(withHoldTracking.getActualRate());
-        withHoldTracking.setActualAmt(actualAmount);
-        if(!(withHoldTracking.getActualAmt() == actualAmount)){
-            throw new IllegalArgumentException("Actual amount is not consistent.");
+        BigDecimal actualHours = withHoldTracking.getActualHours();
+        BigDecimal actualRate = withHoldTracking.getActualRate();
+        BigDecimal paidHours = withHoldTracking.getPaidHours();
+        BigDecimal paidRate = withHoldTracking.getPaidRate();
+
+        if (actualHours != null && actualRate != null) {
+            BigDecimal actualAmount = actualHours.multiply(actualRate);
+            withHoldTracking.setActualAmt(actualAmount);
+            if (!withHoldTracking.getActualAmt().equals(actualAmount)) {
+                throw new IllegalArgumentException("Actual amount is not consistent.");
+            }
         }
 
-        BigDecimal paidAmount = withHoldTracking.getPaidHours().multiply(withHoldTracking.getPaidRate());
-        withHoldTracking.setPaidAmt(paidAmount);
-        if(!(withHoldTracking.getPaidAmt() == paidAmount)){
-            throw new IllegalArgumentException("Paid amount is not consistent.");
+        if (paidHours != null && paidRate != null) {
+            BigDecimal paidAmount = paidHours.multiply(paidRate);
+            withHoldTracking.setPaidAmt(paidAmount);
+            if (!withHoldTracking.getPaidAmt().equals(paidAmount)) {
+                throw new IllegalArgumentException("Paid amount is not consistent.");
+            }
         }
 
-        BigDecimal balance = withHoldTracking.getActualAmt().subtract(withHoldTracking.getPaidAmt());
-        withHoldTracking.setBalance(balance);
-        if(!(withHoldTracking.getBalance() == balance)){
-            throw new IllegalArgumentException("Balance amount is not consistent.");
+        if (withHoldTracking.getActualAmt() != null && withHoldTracking.getPaidAmt() != null) {
+            BigDecimal balance = withHoldTracking.getActualAmt().subtract(withHoldTracking.getPaidAmt());
+            withHoldTracking.setBalance(balance);
+            if (!withHoldTracking.getBalance().equals(balance)) {
+                throw new IllegalArgumentException("Balance amount is not consistent.");
+            }
         }
+
         return repository.save(withHoldTracking);
     }
+
 
     @Override
     public WithHoldTracking updateWithHoldTracking(String trackingId, WithHoldTracking updatedTracking) {
@@ -55,6 +68,7 @@ public class WithHoldTrackingServiceImpl implements WithHoldTrackingService {
 
         existingTracking.setMonth(updatedTracking.getMonth());
         existingTracking.setYear(updatedTracking.getYear());
+        existingTracking.setProjectName(updatedTracking.getProjectName());
         existingTracking.setActualHours(updatedTracking.getActualHours());
         existingTracking.setActualRate(updatedTracking.getActualRate());
         existingTracking.setActualAmt(updatedTracking.getActualAmt());
@@ -64,6 +78,12 @@ public class WithHoldTrackingServiceImpl implements WithHoldTrackingService {
         existingTracking.setBalance(updatedTracking.getBalance());
 
         return repository.save(existingTracking);
+    }
+
+    @Override
+    public void deleteTracking(String id) {
+        WithHoldTracking tracking = getWithHoldTrackingById(id);
+        repository.delete(tracking);
     }
 
 }

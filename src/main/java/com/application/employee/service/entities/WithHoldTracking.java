@@ -28,6 +28,9 @@ public class WithHoldTracking {
     @Column(name = "year")
     private String year;
 
+    @Column(name = "projectname")
+    private String projectName;
+
     @Column(name = "actualhours")
     private BigDecimal actualHours;
 

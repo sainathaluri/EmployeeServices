@@ -7,4 +7,5 @@ public interface WithHoldTrackingService {
     WithHoldTracking getWithHoldTrackingById(String id);
     WithHoldTracking saveWithHoldTracking(WithHoldTracking withHoldTracking);
     WithHoldTracking updateWithHoldTracking(String trackingId, WithHoldTracking updatedTracking);
+    void deleteTracking(String id);
 }

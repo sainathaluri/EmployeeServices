@@ -37,4 +37,9 @@ public class WithHoldTrackingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(tracking);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTracking(@PathVariable String id) {
+        service.deleteTracking(id);
+        return ResponseEntity.noContent().build();
+    }
 }
