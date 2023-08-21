@@ -157,8 +157,8 @@ public class Employee {
     @Column(name = "EMAILID")
     private String emailID;
 
-    @Column(name = "VISA_STATUS")
-    private String visaStatus;
+//    @Column(name = "VISA_STATUS")
+//    private String visaStatus;
 
     @Column(name = "COLLEGE_OF_GRADUATION")
     private String clgOfGrad;
@@ -166,15 +166,18 @@ public class Employee {
     @Column(name = "PHONE_NO")
     private String phoneNo;
 
+    @Column(name = "dob")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     private LocalDate dob;
 
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
-    private LocalDate visaStartDate;
-
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
-    private LocalDate visaExpiryDate;
-//change it to emp status
+//    @Column(name = "visaStartDate")
+//    @JsonSerialize(using = CustomLocalDateSerializer.class)
+//    private LocalDate visaStartDate;
+//
+//    @Column(name = "visaExpiryDate")
+//    @JsonSerialize(using = CustomLocalDateSerializer.class)
+//    private LocalDate visaExpiryDate;
+    //change it to emp status
     @Column(name = "ON_BENCH")
     private String onBench;
 

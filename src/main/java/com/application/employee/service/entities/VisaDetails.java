@@ -23,8 +23,10 @@ public class VisaDetails {
 
     @Column(name = "VISA_TYPE")
     private String visaType;
+
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     private LocalDate visaStartDate;
+
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     private LocalDate  visaExpiryDate;
 
