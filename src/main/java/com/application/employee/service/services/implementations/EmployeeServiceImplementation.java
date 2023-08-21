@@ -67,8 +67,8 @@ public class EmployeeServiceImplementation implements EmployeeService {
         existingEmployee.setDob(employee.getDob());
         existingEmployee.setPhoneNo(employee.getPhoneNo());
         existingEmployee.setClgOfGrad(employee.getClgOfGrad());
-        existingEmployee.setVisaStartDate(employee.getVisaStartDate());
-        existingEmployee.setVisaExpiryDate(employee.getVisaExpiryDate());
+//        existingEmployee.setVisaStartDate(employee.getVisaStartDate());
+//        existingEmployee.setVisaExpiryDate(employee.getVisaExpiryDate());
         existingEmployee.setOnBench(employee.getOnBench());
         existingEmployee.setEmail(employee.getEmail());
         existingEmployee.setPassword(employee.getPassword());

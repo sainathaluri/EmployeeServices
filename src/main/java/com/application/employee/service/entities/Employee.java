@@ -166,14 +166,17 @@ public class Employee {
     @Column(name = "PHONE_NO")
     private String phoneNo;
 
+    @Column(name = "dob")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     private LocalDate dob;
 
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
-    private LocalDate visaStartDate;
-
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
-    private LocalDate visaExpiryDate;
+//    @Column(name = "visaStartDate")
+//    @JsonSerialize(using = CustomLocalDateSerializer.class)
+//    private LocalDate visaStartDate;
+//
+//    @Column(name = "visaExpiryDate")
+//    @JsonSerialize(using = CustomLocalDateSerializer.class)
+//    private LocalDate visaExpiryDate;
 //change it to emp status
     @Column(name = "ON_BENCH")
     private String onBench;
