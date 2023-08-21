@@ -63,10 +63,10 @@ public class EmployeeServiceImplementation implements EmployeeService {
         existingEmployee.setFirstName(employee.getFirstName());
         existingEmployee.setLastName(employee.getLastName());
         existingEmployee.setEmailID(employee.getEmailID());
-//        existingEmployee.setVisaStatus(employee.getVisaStatus());
         existingEmployee.setDob(employee.getDob());
         existingEmployee.setPhoneNo(employee.getPhoneNo());
         existingEmployee.setClgOfGrad(employee.getClgOfGrad());
+//        existingEmployee.setVisaStatus(employee.getVisaStatus());
 //        existingEmployee.setVisaStartDate(employee.getVisaStartDate());
 //        existingEmployee.setVisaExpiryDate(employee.getVisaExpiryDate());
         existingEmployee.setOnBench(employee.getOnBench());
@@ -95,16 +95,5 @@ public class EmployeeServiceImplementation implements EmployeeService {
         return employeeRespository.findAll(pageableWithSort);
     }
 
-//    @Override
-//    public Page<Employee> findEmployeeWithPagination(int offset, int pageSize) {
-//        Page<Employee> employee = employeeRespository.findAll(PageRequest.of(offset, pageSize));
-//        return employee;
-//    }
-//
-//    @Override
-//    public Page<Employee> findEmployeeWithPaginationAndSorting(int offset, int pageSize, String field) {
-//        Page<Employee> employee = employeeRespository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field)));
-//        return employee;
-//    }
 
 }
