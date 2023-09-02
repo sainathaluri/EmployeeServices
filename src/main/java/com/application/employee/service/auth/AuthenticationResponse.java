@@ -16,4 +16,6 @@ public class AuthenticationResponse {
     private String accessToken;
     private String id;
     private Role role;
+    private boolean tempPassword;
+
 }

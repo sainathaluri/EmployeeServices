@@ -4,11 +4,20 @@ import com.application.employee.service.config.JwtService;
 import com.application.employee.service.user.Role;
 import com.application.employee.service.user.User;
 import com.application.employee.service.repositories.UserRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
@@ -18,23 +27,46 @@ public class AuthenticationService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationProvider authenticationProvider;
+    private final JavaMailSender mailSender;
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .id(UUID.randomUUID().toString())
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .build();
+        String tempPassword = UUID.randomUUID().toString();
+        user.setTempPassword(passwordEncoder.encode(tempPassword));
+        sendTemporaryPasswordEmail(user.getEmail(), tempPassword);
+
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().accessToken(jwtToken).build();
+        return AuthenticationResponse.builder().build();
+    }
+
+    public ResponseEntity<String> reset(String userId) {
+        var user = repository.findById(userId);
+        String tempPassword = UUID.randomUUID().toString();
+        System.out.println("Temp Password:"+tempPassword);
+        user.setTempPassword(passwordEncoder.encode(tempPassword));
+        sendTemporaryPasswordEmail(user.getEmail(),tempPassword);
+        repository.save(user);
+        return  ResponseEntity.status(HttpStatus.CREATED).body("Password Reset");
+    }
+
+
+    public ResponseEntity<String> updatePassword(String userId, String password) {
+        var user = repository.findById(userId);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setTempPassword(null);
+        repository.save(user);
+        return  ResponseEntity.status(HttpStatus.CREATED).body("Password updated");
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
+        authenticationProvider.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
@@ -42,16 +74,32 @@ public class AuthenticationService {
         );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
+        boolean tempPassword = StringUtils.hasText(user.getTempPassword());
+        if(user.getTempPassword() != null){
+            user.setPassword(user.getTempPassword());
+        }
+
         var jwtToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
                     .accessToken(jwtToken)
                     .id(user.getId())
+                    .tempPassword(tempPassword)
                     .role(user.getRole())
                     .build();
     }
 
-//        return AuthenticationResponse.builder()
-//                .accessToken(jwtToken)
-//                .role(user.getRole())
-//                .build();
+    public void sendTemporaryPasswordEmail(String toEmail, String temporaryPassword) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(toEmail);
+            helper.setSubject("Temporary Password");
+            helper.setText("Your temporary password is: " + temporaryPassword);
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -1,12 +1,8 @@
 package com.application.employee.service.user;
 
 import com.application.employee.service.entities.Employee;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.Collection;
 
 import lombok.*;
@@ -23,18 +19,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
 
     @Id
+    @Column(name = "ID")
     private String id;
+    @Column(name = "FIRSTNAME")
     private String firstname;
+    @Column(name = "LASTNAME")
     private String lastname;
+    @Column(name = "EMAIL", unique = true)
     private String email;
+    @Column(name = "PASSWORD")
     private String password;
+    @Column(name = "TEMPPASSWORD")
+    private String tempPassword;
     @Enumerated(EnumType.STRING)
+    @Column(name = "ROLE")
     private Role role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorites();
     }
-
     @Override
     public String getPassword() {
         return password;
@@ -64,5 +68,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }
 
