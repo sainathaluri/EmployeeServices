@@ -59,7 +59,16 @@ public class EmployeeServiceImplementation implements EmployeeService {
     public Employee updateEmployee(String id, Employee employee) {
         Employee existingEmployee = employeeRespository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Employee not found with given employeeID: " + id));
-
+        User existingUser = userRepository.findById(id);
+        if(existingUser == null ){
+            existingUser = new User();
+            existingUser.setId(id);
+        }
+        String hashedPassword = passwordEncoder.encode(employee.getPassword());
+        existingUser.setEmail(employee.getEmail());
+        existingUser.setPassword(hashedPassword);
+        existingUser.setRole(Role.EMPLOYEE);
+        userRepository.save(existingUser);
         existingEmployee.setFirstName(employee.getFirstName());
         existingEmployee.setLastName(employee.getLastName());
         existingEmployee.setEmailID(employee.getEmailID());
@@ -67,8 +76,8 @@ public class EmployeeServiceImplementation implements EmployeeService {
         existingEmployee.setPhoneNo(employee.getPhoneNo());
         existingEmployee.setClgOfGrad(employee.getClgOfGrad());
         existingEmployee.setOnBench(employee.getOnBench());
-        existingEmployee.setEmail(employee.getEmail());
-        existingEmployee.setPassword(employee.getPassword());
+//        existingEmployee.setEmail(employee.getEmail());
+//        existingEmployee.setPassword(employee.getPassword());
 
         return employeeRespository.save(existingEmployee);
     }
