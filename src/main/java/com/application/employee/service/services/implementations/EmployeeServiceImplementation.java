@@ -90,6 +90,48 @@ public class EmployeeServiceImplementation implements EmployeeService {
     }
 
     @Override
+    public void createProspectEmployee(Employee employee) {
+        String randomEmployeeID = UUID.randomUUID().toString();
+        employee.setEmployeeID(randomEmployeeID);
+        Employee savedEmployee;
+        savedEmployee = employeeRespository.save(employee);
+
+        User newUser = new User();
+        newUser.setId(employee.getEmployeeID());
+        newUser.setFirstname(employee.getFirstName());
+        newUser.setLastname(employee.getLastName());
+        newUser.setEmail(employee.getEmailID());
+        newUser.setRole(Role.PROSPECT);
+        newUser.setPassword(passwordEncoder.encode(employee.getPassword()));
+        userRepository.save(newUser);
+
+    }
+
+    @Override
+    public void updateProspectEmployee(String id, Employee employee) {
+        Employee existingEmployee = employeeRespository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Employee not found with given employeeID: " + id));
+        User existingUser = userRepository.findById(id);
+        if(existingUser == null ){
+            existingUser = new User();
+            existingUser.setId(id);
+        }
+        existingUser.setEmail(employee.getEmailID());
+        existingUser.setRole(Role.EMPLOYEE);
+        existingUser.setFirstname(employee.getFirstName());
+        existingUser.setLastname(employee.getLastName());
+        userRepository.save(existingUser);
+        existingEmployee.setFirstName(employee.getFirstName());
+        existingEmployee.setLastName(employee.getLastName());
+        existingEmployee.setEmailID(employee.getEmailID());
+        existingEmployee.setDob(employee.getDob());
+        existingEmployee.setPhoneNo(employee.getPhoneNo());
+        existingEmployee.setClgOfGrad(employee.getClgOfGrad());
+        existingEmployee.setOnBench(employee.getOnBench());
+        employeeRespository.save(existingEmployee);
+    }
+
+    @Override
     public Page<Employee> findEmployeeWithPagination(Pageable pageable) {
         return employeeRespository.findAll(pageable);
     }

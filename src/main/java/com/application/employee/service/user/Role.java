@@ -33,8 +33,12 @@ public enum Role {
                     EMPLOYEE_DELETE,
                     EMPLOYEE_CREATE
             )
-  )
-    ;
+    ),
+    PROSPECT(
+            Set.of(
+            PROSPECT_UPDATE
+            )
+    );
 
     @Getter
     private final Set<Permission> permissions;
