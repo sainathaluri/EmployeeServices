@@ -5,8 +5,6 @@ import com.application.employee.service.exceptions.ResourceNotFoundException;
 import com.application.employee.service.repositories.VisaDetailsRepository;
 import com.application.employee.service.services.VisaDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,10 +44,5 @@ public class VisaDetailsServiceImpl implements VisaDetailsService {
     public void deleteVisaDetails(String id) {
         VisaDetails details = getVisaDetailsById(id);
         visaDetailsRepository.delete(details);
-    }
-
-    @Override
-    public Page<VisaDetails> findVisaDetailsByEmployee(Pageable pageable) {
-        return visaDetailsRepository.findAll(pageable);
     }
 }
