@@ -96,12 +96,20 @@ public class EmployeeController {
         PurchaseOrder updatedPurchaseOrder = purchaseOrderService.updateOrder(orderID, updatedOrder);
         return ResponseEntity.ok(updatedPurchaseOrder);
     }
+
     @GetMapping("/{employeeId}/orders")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<PurchaseOrder>> getEmployeeOrders(@PathVariable(value = "employeeId") String employeeId) {
+    public ResponseEntity<Page<PurchaseOrder>> getEmployeeOrders(
+            @PathVariable(value = "employeeId") String employeeId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         Employee employee = employeeService.getEmployee(employeeId);
-        List<PurchaseOrder> orders = employee.getEmployeePurchaseOrder();
-        return ResponseEntity.ok().body(orders);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PurchaseOrder> paginatedOrders = purchaseOrderService.findOrdersByEmployee(pageable);
+
+        return ResponseEntity.ok(paginatedOrders);
     }
 
     @PostMapping("/{employeeId}/trackings")
