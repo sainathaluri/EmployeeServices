@@ -1,9 +1,11 @@
 package com.application.employee.service.config;
 
 import com.application.employee.service.repositories.UserRepository;
+import com.application.employee.service.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -20,16 +22,30 @@ public class ApplicationConfig {
     private final UserRepository repository;
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> repository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+//        return username -> repository.findByEmail(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> {
+            User user = repository.findByEmail(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            // Check if tempPassword is empty or null, and use the appropriate password field
+            String passwordToUse = (user.getTempPassword() == null || user.getTempPassword().isEmpty())
+                    ? user.getPassword()
+                    : user.getTempPassword();
+
+            return new org.springframework.security.core.userdetails.User(
+                    user.getEmail(),
+                    passwordToUse,
+                    user.getAuthorities()
+            );
+        };
     }
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
+    @Primary
+    public AuthenticationProvider myCustomAuthenticationProvider() {
+        return new CustomAuthenticationProvider(this.repository, this.passwordEncoder());
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

@@ -28,13 +28,14 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
+    private String tempPassword;
     @Enumerated(EnumType.STRING)
     private Role role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorites();
     }
-
     @Override
     public String getPassword() {
         return password;
@@ -64,5 +65,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }
 
