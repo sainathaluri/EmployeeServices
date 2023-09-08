@@ -1,5 +1,6 @@
 package com.application.employee.service.services.implementations;
 
+import com.application.employee.service.auth.AuthenticationService;
 import com.application.employee.service.entities.Employee;
 import com.application.employee.service.exceptions.ResourceNotFoundException;
 import com.application.employee.service.repositories.EmployeeRespository;
@@ -25,6 +26,8 @@ public class EmployeeServiceImplementation implements EmployeeService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @Override
     public Employee saveEmployee(Employee employee) {
@@ -37,10 +40,9 @@ public class EmployeeServiceImplementation implements EmployeeService {
         newUser.setId(employee.getEmployeeID());
         newUser.setFirstname(employee.getFirstName());
         newUser.setLastname(employee.getLastName());
-        newUser.setEmail(employee.getEmail());
-        String hashedPassword = passwordEncoder.encode(employee.getPassword());
-        newUser.setPassword(hashedPassword);
+        newUser.setEmail(employee.getEmailID());
         newUser.setRole(Role.EMPLOYEE);
+        newUser.setPassword(passwordEncoder.encode(employee.getPassword()));
         userRepository.save(newUser);
 
         return savedEmployee;
@@ -59,7 +61,16 @@ public class EmployeeServiceImplementation implements EmployeeService {
     public Employee updateEmployee(String id, Employee employee) {
         Employee existingEmployee = employeeRespository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Employee not found with given employeeID: " + id));
-
+        User existingUser = userRepository.findById(id);
+        if(existingUser == null ){
+            existingUser = new User();
+            existingUser.setId(id);
+        }
+        existingUser.setEmail(employee.getEmailID());
+        existingUser.setRole(Role.EMPLOYEE);
+        existingUser.setFirstname(employee.getFirstName());
+        existingUser.setLastname(employee.getLastName());
+        userRepository.save(existingUser);
         existingEmployee.setFirstName(employee.getFirstName());
         existingEmployee.setLastName(employee.getLastName());
         existingEmployee.setEmailID(employee.getEmailID());
@@ -69,9 +80,6 @@ public class EmployeeServiceImplementation implements EmployeeService {
 //        existingEmployee.setVisaStartDate(employee.getVisaStartDate());
 //        existingEmployee.setVisaExpiryDate(employee.getVisaExpiryDate());
         existingEmployee.setOnBench(employee.getOnBench());
-        existingEmployee.setEmail(employee.getEmail());
-        existingEmployee.setPassword(employee.getPassword());
-
         return employeeRespository.save(existingEmployee);
     }
 

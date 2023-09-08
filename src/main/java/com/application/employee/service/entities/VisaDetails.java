@@ -21,15 +21,17 @@ public class VisaDetails {
     @Id
     private String visaId;
 
-    @Column(name = "VISA_TYPE")
+    @Column(name = "visa_type")
     private String visaType;
   
     @Column(name = "visaStartDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
+    @Column(name = "visa_start_date")
     private LocalDate visaStartDate;
   
     @Column(name = "visaExpiryDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
+    @Column(name = "visa_expiry_date")
     private LocalDate  visaExpiryDate;
 
     @ManyToOne
