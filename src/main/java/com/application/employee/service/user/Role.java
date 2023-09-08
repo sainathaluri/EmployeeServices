@@ -36,7 +36,8 @@ public enum Role {
     ),
     PROSPECT(
             Set.of(
-            PROSPECT_UPDATE
+                    PROSPECT_READ,
+                    PROSPECT_UPDATE
             )
     );
 

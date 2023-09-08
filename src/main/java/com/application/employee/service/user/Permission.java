@@ -14,6 +14,7 @@ public enum Permission {
     EMPLOYEE_UPDATE("management:update"),
     EMPLOYEE_CREATE("management:create"),
     EMPLOYEE_DELETE("management:delete"),
+    PROSPECT_READ("management:read"),
     PROSPECT_UPDATE("management:update");
 
     @Getter

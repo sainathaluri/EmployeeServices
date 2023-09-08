@@ -31,10 +31,9 @@ public class AuthenticationController {
     return ResponseEntity.ok(response);
     }
 
-@PostMapping("/resetPassword/{userId}")
-@PreAuthorize("hasRole('ADMIN')")
-public ResponseEntity<String> resetPassword(@PathVariable String userId) {
-    ResponseEntity<String> response = service.reset(userId);
+@PostMapping("/resetPassword")
+public ResponseEntity<String> resetPassword(@RequestBody UserRequest request) {
+    ResponseEntity<String> response = service.reset(request.getEmail());
 
     if (response.getStatusCode() == HttpStatus.CREATED) {
         return ResponseEntity.status(HttpStatus.CREATED).body("Password Reset");
@@ -42,20 +41,8 @@ public ResponseEntity<String> resetPassword(@PathVariable String userId) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Password Reset Failed");
     }
 }
-
     @PostMapping("/updatePassword")
     public ResponseEntity<String> updatePassword(String userId, String password){
         return service.updatePassword(userId, password);
     }
-
-//@PostMapping("/updatePassword/{id}/{password}")
-//public ResponseEntity<String> updatePassword(@PathVariable String id, @PathVariable String password) {
-//    ResponseEntity<String> response = service.updatePassword(id, password);
-//    if (response.getStatusCode() == HttpStatus.CREATED) {
-//        return ResponseEntity.status(HttpStatus.CREATED).body("Password updated");
-//    } else {
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Password update failed");
-//    }
-//}
-
 }
