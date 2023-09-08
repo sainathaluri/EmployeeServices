@@ -6,8 +6,6 @@ import com.application.employee.service.repositories.PurchaseOrderRepository;
 import com.application.employee.service.services.EmployeeService;
 import com.application.employee.service.services.PurchaseOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -56,10 +54,5 @@ public class PurchaseOrderImplementation implements PurchaseOrderService {
     public void deleteOrder(String id) {
         PurchaseOrder order = getOrder(id);
         purchaseOrderRepository.delete(order);
-    }
-
-    @Override
-    public Page<PurchaseOrder> findOrdersByEmployee(Pageable pageable) {
-            return purchaseOrderRepository.findAll(pageable);
     }
 }
