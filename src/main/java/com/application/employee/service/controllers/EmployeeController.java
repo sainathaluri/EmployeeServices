@@ -53,6 +53,21 @@ public class EmployeeController {
         Employee updatedEmployee = employeeService.updateEmployee(employeeID, employee);
         return ResponseEntity.ok("Employee updated successfully");
     }
+
+    @PostMapping("prospect/{employeeID}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> createProspectEmployee(@RequestBody Employee employee) {
+        employeeService.createProspectEmployee(employee);
+        return ResponseEntity.ok("Prospect added successfully");
+    }
+
+    @PutMapping("prospect/{employeeID}")
+    @PreAuthorize("hasRole('PROSPECT')")
+    public ResponseEntity<String> updateProspectEmployee(@PathVariable String employeeID, @RequestBody Employee employee) {
+        employeeService.updateProspectEmployee(employeeID,employee);
+        return ResponseEntity.ok("Prospect added successfully");
+    }
+
     @DeleteMapping("/{employeeID}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteEmployee(@PathVariable String employeeID) {

@@ -16,6 +16,10 @@ public interface EmployeeService {
 
     Employee updateEmployee(String id, Employee e);
 
+    void createProspectEmployee(Employee employee);
+
+    void updateProspectEmployee(String id, Employee employee);
+
     void deleteEmployee(String id);
 
     Page<Employee> findEmployeeWithPagination(Pageable pageable);

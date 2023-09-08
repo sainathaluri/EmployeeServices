@@ -13,7 +13,8 @@ public enum Permission {
     EMPLOYEE_READ("management:read"),
     EMPLOYEE_UPDATE("management:update"),
     EMPLOYEE_CREATE("management:create"),
-    EMPLOYEE_DELETE("management:delete");
+    EMPLOYEE_DELETE("management:delete"),
+    PROSPECT_UPDATE("management:update");
 
     @Getter
     private final String permission;
