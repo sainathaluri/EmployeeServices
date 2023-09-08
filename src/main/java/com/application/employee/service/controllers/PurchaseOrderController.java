@@ -30,11 +30,6 @@ public class PurchaseOrderController {
         PurchaseOrder order = purchaseOrderService.getOrder(orderId);
         return ResponseEntity.ok(order);
     }
-//    @GetMapping
-//    public ResponseEntity<List<PurchaseOrder>> getAllPurchaseOrder() {
-//        List<PurchaseOrder> orderList = purchaseOrderService.getAllOrders();
-//        return ResponseEntity.ok(orderList);
-//    }
     @GetMapping
     public ResponseEntity<Page<PurchaseOrder>> getAllPurchaseOrder(
             @RequestParam(defaultValue = "0") int page,

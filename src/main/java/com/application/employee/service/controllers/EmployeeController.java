@@ -96,13 +96,7 @@ public class EmployeeController {
         PurchaseOrder updatedPurchaseOrder = purchaseOrderService.updateOrder(orderID, updatedOrder);
         return ResponseEntity.ok(updatedPurchaseOrder);
     }
-//    @GetMapping("/{employeeId}/orders")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<List<PurchaseOrder>> getEmployeeOrders(@PathVariable(value = "employeeId") String employeeId) {
-//        Employee employee = employeeService.getEmployee(employeeId);
-//        List<PurchaseOrder> orders = employee.getEmployeePurchaseOrder();
-//        return ResponseEntity.ok().body(orders);
-//    }
+
 @GetMapping("/{employeeId}/orders")
 @PreAuthorize("hasRole('ADMIN')")
 public ResponseEntity<Page<PurchaseOrder>> getEmployeeOrders(
