@@ -1,9 +1,7 @@
 package com.application.employee.service.entities;
 
-import com.application.employee.service.deserializer.CustomLocalDateSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,11 +24,11 @@ public class PurchaseOrder {
     @Column(name = "ID")
     private String orderId;
 
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
+    @JsonFormat(pattern="MM-dd-yyyy")
     @Column(name = "DOJ")
     private LocalDate dateOfJoining;
 
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
+    @JsonFormat(pattern="MM-dd-yyyy")
     @Column(name = "PED")
     private LocalDate projectEndDate;
 

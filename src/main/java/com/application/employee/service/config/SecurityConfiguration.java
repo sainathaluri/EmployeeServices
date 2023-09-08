@@ -30,11 +30,11 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/authenticate")
+                .requestMatchers("/auth/**")
                 .permitAll()
                .requestMatchers("/employees/**","/orders/**").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
                 .requestMatchers(GET,"/employees/**","/orders/**","/trackings/**").hasAnyAuthority(ADMIN_READ.name(),EMPLOYEE_READ.name())
-                .requestMatchers(POST,"/employees/**","/orders/**","/trackings/**","/auth/register","/auth/resetPassword","/auth/updatePassword").hasAnyAuthority(ADMIN_CREATE.name(),EMPLOYEE_CREATE.name())
+                .requestMatchers(POST,"/employees/**","/orders/**","/trackings/**").hasAnyAuthority(ADMIN_CREATE.name(),EMPLOYEE_CREATE.name())
                 .requestMatchers(PUT,"/employees/**","/orders/**","/trackings/**").hasAnyAuthority(ADMIN_UPDATE.name(),EMPLOYEE_UPDATE.name())
                 .requestMatchers(DELETE,"/employees/**","/orders/**","/trackings/**").hasAnyAuthority(ADMIN_DELETE.name(),EMPLOYEE_DELETE.name())
                 .anyRequest()
@@ -48,10 +48,4 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-    public class UserNotFoundException extends RuntimeException {
-        public UserNotFoundException(String message) {
-            super(message);
-        }
-    }
-
 }

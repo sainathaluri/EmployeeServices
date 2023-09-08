@@ -27,10 +27,8 @@ public class ProjectHistory {
     @Column(name = "PROJECT_ADDRESS")
     private String projectAddress;
     @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @Column(name = "PROJECT_START_DATE")
     private LocalDate projectStartDate;
     @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @Column(name = "PROJECT_END_DATE")
     private LocalDate projectEndDate;
     @Column(name = "PROJECT_STATUS")
     private String projectStatus;
