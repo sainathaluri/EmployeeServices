@@ -96,6 +96,7 @@ public class EmployeeController {
         PurchaseOrder updatedPurchaseOrder = purchaseOrderService.updateOrder(orderID, updatedOrder);
         return ResponseEntity.ok(updatedPurchaseOrder);
     }
+<<<<<<< HEAD
 
     @GetMapping("/{employeeId}/orders")
     @PreAuthorize("hasRole('ADMIN')")
@@ -105,6 +106,23 @@ public class EmployeeController {
             @RequestParam(defaultValue = "10") int size
     ) {
         Employee employee = employeeService.getEmployee(employeeId);
+=======
+//    @GetMapping("/{employeeId}/orders")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<List<PurchaseOrder>> getEmployeeOrders(@PathVariable(value = "employeeId") String employeeId) {
+//        Employee employee = employeeService.getEmployee(employeeId);
+//        List<PurchaseOrder> orders = employee.getEmployeePurchaseOrder();
+//        return ResponseEntity.ok().body(orders);
+//    }
+@GetMapping("/{employeeId}/orders")
+@PreAuthorize("hasRole('ADMIN')")
+public ResponseEntity<Page<PurchaseOrder>> getEmployeeOrders(
+        @PathVariable(value = "employeeId") String employeeId,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+) {
+    Employee employee = employeeService.getEmployee(employeeId);
+>>>>>>> parent of 5afcae7 (09-09-2023)
 
         Pageable pageable = PageRequest.of(page, size);
         Page<PurchaseOrder> paginatedOrders = purchaseOrderService.findOrdersByEmployee(pageable);
