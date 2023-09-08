@@ -96,21 +96,13 @@ public class EmployeeController {
         PurchaseOrder updatedPurchaseOrder = purchaseOrderService.updateOrder(orderID, updatedOrder);
         return ResponseEntity.ok(updatedPurchaseOrder);
     }
-
-@GetMapping("/{employeeId}/orders")
-@PreAuthorize("hasRole('ADMIN')")
-public ResponseEntity<Page<PurchaseOrder>> getEmployeeOrders(
-        @PathVariable(value = "employeeId") String employeeId,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size
-) {
-    Employee employee = employeeService.getEmployee(employeeId);
-
-    Pageable pageable = PageRequest.of(page, size);
-    Page<PurchaseOrder> paginatedOrders = purchaseOrderService.findOrdersByEmployee(pageable);
-
-    return ResponseEntity.ok(paginatedOrders);
-}
+    @GetMapping("/{employeeId}/orders")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<PurchaseOrder>> getEmployeeOrders(@PathVariable(value = "employeeId") String employeeId) {
+        Employee employee = employeeService.getEmployee(employeeId);
+        List<PurchaseOrder> orders = employee.getEmployeePurchaseOrder();
+        return ResponseEntity.ok().body(orders);
+    }
 
     @PostMapping("/{employeeId}/trackings")
     @PreAuthorize("hasRole('ADMIN')")
@@ -154,21 +146,21 @@ public ResponseEntity<Page<PurchaseOrder>> getEmployeeOrders(
         ProjectHistory updateProjectHistory = projectHistoryService.updateProjectHistory(projectID,updateHistory);
         return ResponseEntity.ok(updateProjectHistory);
     }
-@GetMapping("/{employeeId}/projects")
-@PreAuthorize("hasRole('ADMIN')")
-public ResponseEntity<Page<ProjectHistory>> getEmployeeProjectHistory(
-        @PathVariable(value = "employeeId") String employeeId,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size
-) {
-    Employee employee = employeeService.getEmployee(employeeId);
+  
+    @GetMapping("/{employeeId}/projects")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<ProjectHistory>> getEmployeeProjectHistory(
+            @PathVariable(value = "employeeId") String employeeId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Employee employee = employeeService.getEmployee(employeeId);
 
-    Pageable pageable = PageRequest.of(page, size);
-    Page<ProjectHistory> paginatedHistory = projectHistoryService.findProjectHistoryByEmployee(pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProjectHistory> paginatedHistory = projectHistoryService.findProjectHistoryByEmployee(pageable);
 
-    return ResponseEntity.ok(paginatedHistory);
-}
-
+        return ResponseEntity.ok(paginatedHistory);
+    }
 
     @PostMapping("/{employeeId}/visa-details")
     @PreAuthorize("hasRole('ADMIN')")
@@ -190,19 +182,11 @@ public ResponseEntity<Page<ProjectHistory>> getEmployeeProjectHistory(
     }
     @GetMapping("/{employeeId}/visa-details")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Page<VisaDetails>> getEmployeeVisaDetails(
-            @PathVariable(value = "employeeId") String employeeId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
+    public ResponseEntity<List<VisaDetails>> getEmployeeVisaDetails(@PathVariable(value = "employeeId") String employeeId){
         Employee employee = employeeService.getEmployee(employeeId);
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<VisaDetails> paginatedDetails = visaDetailsService.findVisaDetailsByEmployee( pageable);
-
-        return ResponseEntity.ok(paginatedDetails);
+        List<VisaDetails> detailsList = employee.getEmployeeVisaDetails();
+        return ResponseEntity.ok().body(detailsList);
     }
-
 }
 
 
