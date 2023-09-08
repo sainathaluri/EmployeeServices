@@ -2,6 +2,7 @@ package com.application.employee.service.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -76,14 +77,32 @@ public class JwtService {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+//    private Claims extractAllClaims(String token) {
+//        return Jwts
+//                .parserBuilder()
+//                .setSigningKey(getSignInKey())
+//                .build()
+//                .parseClaimsJws(token)
+//                .getBody();
+//    }
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts
+                    .parserBuilder()
+                    .setSigningKey(getSignInKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (MalformedJwtException e) {
+            // Log the token that caused the issue
+            System.out.println("Token before extraction: " + token);
+            Claims claims = extractAllClaims(token);
+
+            System.out.println("Malformed JWT: " + token);
+            throw e; // Rethrow the exception for further handling
+        }
     }
+
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
