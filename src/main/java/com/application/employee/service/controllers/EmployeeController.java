@@ -153,15 +153,6 @@ public class EmployeeController {
         VisaDetails updateDetails = visaDetailsService.updateVisaDetails(visaID,updateVisaDetails);
         return ResponseEntity.ok(updateDetails);
     }
-//    public ResponseEntity<ProjectHistory> updateHistory(
-//            @PathVariable("projectID") String projectID,
-//            @RequestBody ProjectHistory updateHistory
-//    ) {
-//        ProjectHistory existingProjectHistory = projectHistoryService.getProjectHistoryById(projectID);
-//        updateHistory.setProjectId(projectID);
-//        ProjectHistory updateProjectHistory = projectHistoryService.updateProjectHistory(projectID,updateHistory);
-//        return ResponseEntity.ok(updateProjectHistory);
-//    }
     @GetMapping("/{employeeId}/visa-details")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<VisaDetails>> getEmployeeVisaDetails(@PathVariable(value = "employeeId") String employeeId){

@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Blob;
 import java.time.LocalDate;
 @Getter
 @Setter
@@ -27,6 +28,10 @@ public class WithHoldTracking {
 
     @Column(name = "year")
     private String year;
+
+    @Lob
+    @Column(name = "excel_data", columnDefinition = "longtext")
+    private String excelData;
 
     @Column(name = "projectname")
     private String projectName;

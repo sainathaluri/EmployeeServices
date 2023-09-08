@@ -76,6 +76,7 @@ public class WithHoldTrackingServiceImpl implements WithHoldTrackingService {
         existingTracking.setPaidRate(updatedTracking.getPaidRate());
         existingTracking.setPaidAmt(updatedTracking.getPaidAmt());
         existingTracking.setBalance(updatedTracking.getBalance());
+        existingTracking.setExcelData(updatedTracking.getExcelData());
 
         return repository.save(existingTracking);
     }
