@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -31,6 +32,10 @@ public class EmployeeServiceImplementation implements EmployeeService {
 
     @Override
     public Employee saveEmployee(Employee employee) {
+        Optional<Employee> existingEmployee = employeeRespository.findByEmailID(employee.getEmailID());
+        if (existingEmployee.isPresent()) {
+            return null;
+        }
         String randomEmployeeID = UUID.randomUUID().toString();
         employee.setEmployeeID(randomEmployeeID);
         Employee savedEmployee;

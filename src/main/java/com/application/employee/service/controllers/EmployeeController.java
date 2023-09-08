@@ -29,7 +29,10 @@ public class EmployeeController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createEmployee(@RequestBody Employee employe) {
-        Employee employee = employeeService.saveEmployee(employe);
+            Employee employee = employeeService.saveEmployee(employe);
+        if (employee == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Employee already exists for given EmailID");
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body("Employee created successfully");
     }
     @GetMapping("/{employeeID}")
@@ -54,14 +57,14 @@ public class EmployeeController {
         return ResponseEntity.ok("Employee updated successfully");
     }
 
-    @PostMapping("prospect/{employeeID}")
+    @PostMapping("/prospect")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createProspectEmployee(@RequestBody Employee employee) {
         employeeService.createProspectEmployee(employee);
         return ResponseEntity.ok("Prospect added successfully");
     }
 
-    @PutMapping("prospect/{employeeID}")
+    @PutMapping("/prospect/{employeeID}")
     @PreAuthorize("hasRole('PROSPECT')")
     public ResponseEntity<String> updateProspectEmployee(@PathVariable String employeeID, @RequestBody Employee employee) {
         employeeService.updateProspectEmployee(employeeID,employee);
@@ -143,13 +146,22 @@ public class EmployeeController {
         ProjectHistory updateProjectHistory = projectHistoryService.updateProjectHistory(projectID,updateHistory);
         return ResponseEntity.ok(updateProjectHistory);
     }
+  
     @GetMapping("/{employeeId}/projects")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<ProjectHistory>> getEmployeeProjectHistory(@PathVariable(value = "employeeId") String employeeId){
+    public ResponseEntity<Page<ProjectHistory>> getEmployeeProjectHistory(
+            @PathVariable(value = "employeeId") String employeeId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         Employee employee = employeeService.getEmployee(employeeId);
-        List<ProjectHistory> historyList = employee.getEmployeeProjectHistory();
-        return ResponseEntity.ok().body(historyList);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProjectHistory> paginatedHistory = projectHistoryService.findProjectHistoryByEmployee(pageable);
+
+        return ResponseEntity.ok(paginatedHistory);
     }
+
     @PostMapping("/{employeeId}/visa-details")
     @PreAuthorize("hasRole('ADMIN')")
     public VisaDetails createDetails(@PathVariable(value = "employeeId") String employeeId, @RequestBody VisaDetails details){
@@ -177,48 +189,4 @@ public class EmployeeController {
     }
 }
 
-
-//    @PutMapping("/{employeeID}/orders/{orderID}")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<PurchaseOrder> updateOrder(
-//            @PathVariable("employeeID") String employeeID,
-//            @PathVariable("orderID") String orderID,
-//            @RequestBody PurchaseOrder updatedOrder
-//    ) {
-//        Employee employee = employeeService.getEmployee(employeeID);
-//        PurchaseOrder existingOrder = purchaseOrderService.getOrder(orderID);
-//
-//        if (existingOrder.getEmployee().getEmployeeID().equals(employeeID)) {
-//            updatedOrder.setOrderId(orderID);
-//            updatedOrder.setEmployee(employee);
-//            PurchaseOrder updatedPurchaseOrder = purchaseOrderService.updateOrder(orderID,updatedOrder);
-//            return ResponseEntity.ok(updatedPurchaseOrder);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//    }
-
-
-//        @GetMapping
-//    public ResponseEntity<List<Employee>> getAllEmployee() {
-//        List<Employee> employeeList = employeeService.getAllEmployee();
-//        return ResponseEntity.ok(employeeList);
-//    }
-//    @GetMapping("/pagination/{offset}/{pageSize}")
-//    public ResponseEntity<List<Employee>> getEmployeeByPagination(@PathVariable int offset, @PathVariable int pageSize){
-//        List<Employee> employeeWithPagination = employeeService.findEmployeeWithPagination(offset, pageSize).getContent();
-//        return ResponseEntity.ok(employeeWithPagination);
-//    }
-//    @GetMapping("/pagination/{offset}/{pageSize}")
-//    public ResponseEntity<Page<Employee>> getEmployeeByPagination(@PathVariable int offset, @PathVariable int pageSize){
-//        Page<Employee> employeeWithPagination = employeeService.findEmployeeWithPagination(offset, pageSize);
-//        return ResponseEntity.ok(employeeWithPagination);
-//    }
-//    @GetMapping("/paginationandsort/{offset}/{pageSize}/{field}")
-//    public ResponseEntity<Page<Employee>> getEmployeeByPaginationAndSorting(@PathVariable int offset,
-//                                                                            @PathVariable int pageSize,
-//                                                                            @PathVariable String field){
-//        Page<Employee> employeeWithPagination = employeeService.findEmployeeWithPaginationAndSorting(offset, pageSize, field);
-//        return ResponseEntity.ok(employeeWithPagination);
-//    }
 

@@ -46,16 +46,18 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().build();
     }
 
-    public ResponseEntity<String> reset(String userId) {
-        var user = repository.findById(userId);
+    public ResponseEntity<String> reset(String email) {
+        var user = repository.findByEmail(email);
+        if (!user.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with given emailID");
+        }
         String tempPassword = UUID.randomUUID().toString();
-        System.out.println("Temp Password:"+tempPassword);
-        user.setTempPassword(passwordEncoder.encode(tempPassword));
-        sendTemporaryPasswordEmail(user.getEmail(),tempPassword);
-        repository.save(user);
-        return  ResponseEntity.status(HttpStatus.CREATED).body("Password Reset");
+        System.out.println("Temp Password:" + tempPassword);
+        user.get().setTempPassword(passwordEncoder.encode(tempPassword));
+        sendTemporaryPasswordEmail(user.get().getEmail(), tempPassword);
+        repository.save(user.get());
+        return ResponseEntity.status(HttpStatus.CREATED).body("Password Reset");
     }
-
 
     public ResponseEntity<String> updatePassword(String userId, String password) {
         var user = repository.findById(userId);
@@ -101,5 +103,4 @@ public class AuthenticationService {
             e.printStackTrace();
         }
     }
-
 }
