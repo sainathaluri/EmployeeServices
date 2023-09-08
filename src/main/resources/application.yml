@@ -2,16 +2,16 @@ server:
  port: 8082
 
 spring:
- datasource:
-   url: jdbc:mysql://localhost:3306/quick_hrms
-   username: root
-   password: Sai12Baba
-   driver-class-name: com.mysql.cj.jdbc.Driver
+  datasource:
+    url: jdbc:mysql://localhost:3306/quick_hrms
+    username: root
+    password: Sai12Baba
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
- jpa:
-   hibernate:
-     ddl-auto: update
-   show-sql: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 application:
  security:

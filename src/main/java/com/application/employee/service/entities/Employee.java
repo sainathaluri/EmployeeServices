@@ -177,7 +177,6 @@ public class Employee {
 //    @Column(name = "visaExpiryDate")
 //    @JsonSerialize(using = CustomLocalDateSerializer.class)
 //    private LocalDate visaExpiryDate;
-    //change it to emp status
     @Column(name = "ON_BENCH")
     private String onBench;
 
