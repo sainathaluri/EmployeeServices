@@ -131,11 +131,18 @@ public class EmployeeController {
         return ResponseEntity.ok(updatedWithHoldTracking);
     }
     @GetMapping("/{employeeId}/trackings")
-    public ResponseEntity<List<WithHoldTracking>> getEmployeeWithHold(@PathVariable(value = "employeeId") String employeeId) {
+    public ResponseEntity<Page<WithHoldTracking>> getEmployeeWithHold(
+            @PathVariable(value = "employeeId") String employeeId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         Employee employee = employeeService.getEmployee(employeeId);
-        List<WithHoldTracking> tracking = employee.getEmployeeWithHoldTracking();
-        return ResponseEntity.ok().body(tracking);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<WithHoldTracking> trackings = withHoldTrackingService.findEmployeeWithPagination(pageable);
+        return ResponseEntity.ok(trackings);
     }
+
     @PostMapping("/{employeeId}/projects")
     @PreAuthorize("hasRole('ADMIN')")
     public ProjectHistory createHistory(@PathVariable(value = "employeeId") String employeeId, @RequestBody ProjectHistory history){
@@ -188,14 +195,6 @@ public class EmployeeController {
         VisaDetails updateDetails = visaDetailsService.updateVisaDetails(visaID,updateVisaDetails);
         return ResponseEntity.ok(updateDetails);
     }
-//    @GetMapping("/{employeeId}/visa-details")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<List<VisaDetails>> getEmployeeVisaDetails(@PathVariable(value = "employeeId") String employeeId){
-//        Employee employee = employeeService.getEmployee(employeeId);
-//        List<VisaDetails> detailsList = employee.getEmployeeVisaDetails();
-//        return ResponseEntity.ok().body(detailsList);
-//    }
-
     @GetMapping("/{employeeId}/visa-details")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<VisaDetails>> getEmployeeVisaDetails(
