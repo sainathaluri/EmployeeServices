@@ -5,6 +5,8 @@ import com.application.employee.service.exceptions.ResourceNotFoundException;
 import com.application.employee.service.repositories.ProjectHistoryRepository;
 import com.application.employee.service.services.ProjectHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
@@ -48,4 +50,10 @@ public class ProjectHistoryServiceImpl implements ProjectHistoryService {
         ProjectHistory history = getProjectHistoryById(id);
         projectHistoryRepository.delete(history);
     }
+
+    @Override
+    public Page<ProjectHistory> findProjectHistoryByEmployee(Pageable pageable) {
+        return projectHistoryRepository.findAll(pageable);
+    }
+
 }

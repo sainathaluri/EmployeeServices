@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -19,17 +20,13 @@ import java.time.LocalDate;
 @Table(name = "visa_details")
 public class VisaDetails {
     @Id
+    @Column(name = "ID")
     private String visaId;
-
     @Column(name = "visa_type")
     private String visaType;
-  
-    @Column(name = "visaStartDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @Column(name = "visa_start_date")
     private LocalDate visaStartDate;
-  
-    @Column(name = "visaExpiryDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @Column(name = "visa_expiry_date")
     private LocalDate  visaExpiryDate;
