@@ -25,7 +25,4 @@ public interface EmployeeService {
 
     Page<Employee> findEmployeeWithPagination(Pageable pageable);
 
-    Page<Employee> findEmployeeWithPaginationAndSorting(Pageable pageable, String field);
-
-
 }

@@ -26,11 +26,9 @@ public class ProjectHistory {
     private String subVendorTwo;
     @Column(name = "PROJECT_ADDRESS")
     private String projectAddress;
-    @Column(name = "projectStartDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @Column(name = "PROJECT_START_DATE")
     private LocalDate projectStartDate;
-    @Column(name = "projectEndDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @Column(name = "PROJECT_END_DATE")
     private LocalDate projectEndDate;

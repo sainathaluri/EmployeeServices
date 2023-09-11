@@ -143,11 +143,4 @@ public class EmployeeServiceImplementation implements EmployeeService {
         return employeeRespository.findAll(pageable);
     }
 
-    @Override
-    public Page<Employee> findEmployeeWithPaginationAndSorting(Pageable pageable, String field) {
-        Pageable pageableWithSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(field));
-        return employeeRespository.findAll(pageableWithSort);
-    }
-
-
 }
