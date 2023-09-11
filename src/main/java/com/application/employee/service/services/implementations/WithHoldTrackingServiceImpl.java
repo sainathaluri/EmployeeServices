@@ -3,6 +3,8 @@ import com.application.employee.service.entities.WithHoldTracking;
 import com.application.employee.service.repositories.WithHoldTrackingRepository;
 import com.application.employee.service.services.WithHoldTrackingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -85,6 +87,11 @@ public class WithHoldTrackingServiceImpl implements WithHoldTrackingService {
     public void deleteTracking(String id) {
         WithHoldTracking tracking = getWithHoldTrackingById(id);
         repository.delete(tracking);
+    }
+
+    @Override
+    public Page<WithHoldTracking> findEmployeeWithPagination(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
 }
